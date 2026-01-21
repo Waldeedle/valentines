@@ -423,7 +423,44 @@
         display: none;
       }
 
-      @media (max-width: 480px) {
+      /* Tablet and smaller */
+      @media (max-width: 900px) {
+        .photos-container {
+          flex-wrap: wrap;
+          gap: 1rem;
+        }
+
+        .fiancee-photo {
+          max-width: 90vw;
+          max-height: 60vh;
+        }
+
+        .bday-frame .fiancee-photo {
+          max-width: 70vw;
+          max-height: 45vh;
+        }
+
+        .photo-frame {
+          margin: 1rem auto;
+          padding: 15px;
+        }
+
+        .photo-frame::before,
+        .photo-frame::after {
+          font-size: 1.2rem;
+        }
+
+        .celebration h2 {
+          font-size: 3rem;
+        }
+      }
+
+      /* Mobile */
+      @media (max-width: 600px) {
+        body {
+          padding: 1rem;
+        }
+
         h1 {
           font-size: 2.5rem;
         }
@@ -433,15 +470,83 @@
         }
 
         .message {
-          font-size: 1.1rem;
+          font-size: 1rem;
+          line-height: 1.6;
         }
 
         .heart-icon {
-          font-size: 4rem;
+          font-size: 3.5rem;
         }
 
         .celebration h2 {
-          font-size: 2.5rem;
+          font-size: 2.2rem;
+        }
+
+        .celebration p {
+          font-size: 1.2rem;
+        }
+
+        .celebration .hearts {
+          font-size: 2rem;
+        }
+
+        .btn {
+          padding: 0.8rem 1.8rem;
+          font-size: 1rem;
+        }
+
+        .buttons {
+          gap: 1rem;
+        }
+
+        .fiancee-photo {
+          max-width: 85vw;
+          max-height: 50vh;
+        }
+
+        .bday-frame .fiancee-photo {
+          max-width: 65vw;
+          max-height: 35vh;
+        }
+
+        .photo-frame {
+          padding: 10px;
+          transform: rotate(-2deg);
+        }
+
+        .bday-frame {
+          transform: rotate(2deg) !important;
+        }
+
+        .photo-frame::before,
+        .photo-frame::after {
+          font-size: 1rem;
+          top: -15px;
+          bottom: -15px;
+        }
+
+        .corner-decoration {
+          font-size: 1.5rem;
+        }
+      }
+
+      /* Small mobile */
+      @media (max-width: 400px) {
+        h1 {
+          font-size: 2rem;
+        }
+
+        .question {
+          font-size: 1.5rem;
+        }
+
+        .celebration h2 {
+          font-size: 1.8rem;
+        }
+
+        .photo-frame::before,
+        .photo-frame::after {
+          font-size: 0.8rem;
         }
       }
     </style>
