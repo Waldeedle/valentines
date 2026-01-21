@@ -1,0 +1,710 @@
+---
+
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/valentines/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Will you be my Valentine?" />
+    <title>Be My Valentine?</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Lato:wght@300;400&display=swap');
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --pink: #ff6b9d;
+        --red: #c9184a;
+        --light-pink: #ffb3c6;
+        --cream: #fff5f7;
+      }
+
+      html, body {
+        height: 100%;
+        overflow-x: hidden;
+      }
+
+      body {
+        font-family: 'Lato', sans-serif;
+        background: linear-gradient(135deg, var(--cream) 0%, var(--light-pink) 100%);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+        position: relative;
+      }
+
+      :global(.floating-heart) {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        font-size: 1.5rem;
+        pointer-events: none;
+        z-index: 0;
+        animation: floatUp linear infinite;
+      }
+
+      @keyframes floatUp {
+        0% {
+          transform: translateY(0) rotate(0deg) translateX(0);
+          opacity: 0;
+        }
+        5% {
+          opacity: 0.5;
+        }
+        25% {
+          transform: translateY(-25vh) rotate(90deg) translateX(15px);
+        }
+        50% {
+          transform: translateY(-50vh) rotate(180deg) translateX(-15px);
+        }
+        75% {
+          transform: translateY(-75vh) rotate(270deg) translateX(15px);
+        }
+        95% {
+          opacity: 0.5;
+        }
+        100% {
+          transform: translateY(-110vh) rotate(360deg) translateX(0);
+          opacity: 0;
+        }
+      }
+
+      :global(.firework-heart) {
+        position: fixed;
+        font-size: 2rem;
+        pointer-events: none;
+        z-index: 100;
+        animation: fireworkBurst 1.5s ease-out forwards;
+      }
+
+      @keyframes fireworkBurst {
+        0% {
+          opacity: 1;
+          transform: translate(0, 0) scale(0.5) rotate(0deg);
+        }
+        50% {
+          opacity: 1;
+          transform: translate(var(--tx), var(--ty)) scale(1.2) rotate(180deg);
+        }
+        100% {
+          opacity: 0;
+          transform: translate(var(--tx2), var(--ty2)) scale(0.8) rotate(360deg);
+        }
+      }
+
+      .container {
+        text-align: center;
+        z-index: 1;
+        max-width: 1400px;
+        width: 100%;
+        animation: fadeIn 1.5s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .heart-icon {
+        font-size: 5rem;
+        color: var(--red);
+        animation: heartbeat 1.5s ease-in-out infinite;
+        margin-bottom: 1rem;
+      }
+
+      @keyframes heartbeat {
+        0%, 100% {
+          transform: scale(1);
+        }
+        15% {
+          transform: scale(1.15);
+        }
+        30% {
+          transform: scale(1);
+        }
+        45% {
+          transform: scale(1.1);
+        }
+        60% {
+          transform: scale(1);
+        }
+      }
+
+      h1 {
+        font-family: 'Dancing Script', cursive;
+        font-size: 3.5rem;
+        color: var(--red);
+        margin-bottom: 1.5rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .message {
+        font-size: 1.25rem;
+        color: #555;
+        line-height: 1.8;
+        margin-bottom: 2.5rem;
+        font-weight: 300;
+      }
+
+      .message p {
+        margin-bottom: 1rem;
+      }
+
+      .message .highlight {
+        color: var(--red);
+        font-weight: 400;
+      }
+
+      .question {
+        font-family: 'Dancing Script', cursive;
+        font-size: 2.5rem;
+        color: var(--pink);
+        margin-bottom: 2rem;
+      }
+
+      .buttons {
+        display: flex;
+        gap: 1.5rem;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        padding: 1rem 2.5rem;
+        font-size: 1.1rem;
+        font-family: 'Lato', sans-serif;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 400;
+      }
+
+      .btn-yes {
+        background: linear-gradient(135deg, var(--pink) 0%, var(--red) 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(201, 24, 74, 0.4);
+      }
+
+      .btn-yes:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 25px rgba(201, 24, 74, 0.5);
+      }
+
+      .btn-no {
+        background: transparent;
+        color: var(--red);
+        border: 2px solid var(--pink);
+        position: relative;
+        transition: none;
+      }
+
+      .btn-no.escaping {
+        position: fixed;
+        z-index: 100;
+      }
+
+      .celebration {
+        display: none;
+        animation: celebrate 0.5s ease-out forwards;
+        width: 100%;
+        text-align: center;
+      }
+
+      .celebration.show {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      @keyframes celebrate {
+        from {
+          opacity: 0;
+          transform: scale(0.5);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .celebration h2 {
+        font-family: 'Dancing Script', cursive;
+        font-size: 4rem;
+        color: var(--red);
+        margin-bottom: 1rem;
+      }
+
+      .celebration p {
+        font-size: 1.5rem;
+        color: #555;
+      }
+
+      .celebration .hearts {
+        font-size: 3rem;
+        margin-top: 1rem;
+      }
+
+      .photo-frame {
+        margin: 2rem auto 0 auto;
+        padding: 20px;
+        background: linear-gradient(145deg, #fff5f7 0%, #ffe0e8 100%);
+        border-radius: 15px;
+        box-shadow: 0 8px 30px rgba(201, 24, 74, 0.3);
+        display: block;
+        width: fit-content;
+        transform: rotate(-4deg);
+        animation: photoAppear 0.8s ease-out 0.5s both;
+        position: relative;
+        border: 4px solid var(--pink);
+      }
+
+      .photo-frame::before {
+        content: '🌹 💕 🌸 💖 🌺 💗 🌷';
+        position: absolute;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 1.8rem;
+        white-space: nowrap;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+
+      .photo-frame::after {
+        content: '🌷 💗 🌺 💖 🌸 💕 🌹';
+        position: absolute;
+        bottom: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 1.8rem;
+        white-space: nowrap;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+
+      .photo-decorations {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        pointer-events: none;
+      }
+
+      .corner-decoration {
+        position: absolute;
+        font-size: 2rem;
+      }
+
+      .corner-decoration.top-left {
+        top: -15px;
+        left: -15px;
+      }
+
+      .corner-decoration.top-right {
+        top: -15px;
+        right: -15px;
+      }
+
+      .corner-decoration.bottom-left {
+        bottom: -15px;
+        left: -15px;
+      }
+
+      .corner-decoration.bottom-right {
+        bottom: -15px;
+        right: -15px;
+      }
+
+      .photos-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 1rem;
+        width: 100%;
+        flex-wrap: nowrap;
+      }
+
+      .photos-container .photo-frame {
+        margin: 1rem;
+      }
+
+      .bday-frame {
+        transform: rotate(5deg) !important;
+        background: linear-gradient(145deg, #fffbe6 0%, #ffe6f0 100%) !important;
+        border-color: #ff9ecd !important;
+      }
+
+      .bday-frame::before {
+        content: '🎈 🎂 🎉 🎊 🎁 🎀 🎈' !important;
+      }
+
+      .bday-frame::after {
+        content: '🎈 🎀 🎁 🎊 🎉 🎂 🎈' !important;
+      }
+
+      .bday-frame .fiancee-photo {
+        max-width: 350px;
+        max-height: 450px;
+      }
+
+      @keyframes photoAppear {
+        from {
+          opacity: 0;
+          transform: rotate(-4deg) scale(0.8);
+        }
+        to {
+          opacity: 1;
+          transform: rotate(-4deg) scale(1);
+        }
+      }
+
+      .bday-frame {
+        animation: bdayPhotoAppear 0.8s ease-out 0.7s both !important;
+      }
+
+      @keyframes bdayPhotoAppear {
+        from {
+          opacity: 0;
+          transform: rotate(5deg) scale(0.8);
+        }
+        to {
+          opacity: 1;
+          transform: rotate(5deg) scale(1);
+        }
+      }
+
+      .fiancee-photo {
+        max-width: 700px;
+        max-height: 900px;
+        border-radius: 10px;
+        display: block;
+        object-fit: cover;
+        border: 3px solid white;
+        box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+      }
+
+      .initial-content {
+        transition: opacity 0.3s ease;
+      }
+
+      .initial-content.hidden {
+        display: none;
+      }
+
+      @media (max-width: 480px) {
+        h1 {
+          font-size: 2.5rem;
+        }
+
+        .question {
+          font-size: 1.8rem;
+        }
+
+        .message {
+          font-size: 1.1rem;
+        }
+
+        .heart-icon {
+          font-size: 4rem;
+        }
+
+        .celebration h2 {
+          font-size: 2.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="initial-content" id="initial-content">
+        <div class="heart-icon">❤️</div>
+        <h1>My Dearest Love</h1>
+        <div class="message">
+          <p>Every moment with you feels like a <span class="highlight">beautiful dream</span> I never want to wake up from.</p>
+          <p>You make my heart smile in ways I never knew were possible.</p>
+          <p>I can't imagine spending this Valentine's Day with anyone but you Pari.</p>
+        </div>
+        <p class="question">Khadija, will you be my Valentine?</p>
+        <div class="buttons">
+          <button class="btn btn-yes" id="btn-yes">Yes! 💕</button>
+          <button class="btn btn-no" id="btn-no">No</button>
+        </div>
+      </div>
+
+      <div class="celebration" id="celebration">
+        <h2>You've Made Me So Happy!</h2>
+        <p>I can't wait to celebrate our love together! 💑</p>
+        <div class="hearts">💕 💖 💕</div>
+        <div class="photos-container">
+          <div class="photo-frame">
+            <img src="/valentines/fiancee.jpg" alt="My beautiful fiancee" class="fiancee-photo" />
+            <span class="corner-decoration top-left">💐</span>
+            <span class="corner-decoration top-right">💐</span>
+            <span class="corner-decoration bottom-left">🌹</span>
+            <span class="corner-decoration bottom-right">🌹</span>
+          </div>
+          <div class="photo-frame bday-frame">
+            <img src="/valentines/bday.jpeg" alt="Birthday memories" class="fiancee-photo" />
+            <span class="corner-decoration top-left">🎂</span>
+            <span class="corner-decoration top-right">🎂</span>
+            <span class="corner-decoration bottom-left">🎁</span>
+            <span class="corner-decoration bottom-right">🎁</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Heart emoji options
+      const hearts = ['❤️', '💕', '💗', '💖', '💓', '💘'];
+
+      // Create a single floating heart
+      function createHeart(options = {}) {
+        const heart = document.createElement('span');
+        heart.className = 'floating-heart';
+        heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+
+        // Random horizontal position across full viewport width (-2 to 98 for edge coverage)
+        const leftPos = -2 + Math.floor(Math.random() * 100);
+        heart.style.setProperty('left', leftPos + 'vw', 'important');
+        // Start from bottom of screen
+        heart.style.setProperty('bottom', '-50px', 'important');
+
+        // Random duration for variety (2x faster)
+        const duration = options.fast ? (3 + Math.random() * 2) : (6 + Math.random() * 4);
+        heart.style.animationDuration = duration + 's';
+
+        // Random delay so hearts appear at different heights
+        if (options.initialDelay !== undefined) {
+          // Negative delay starts animation partway through (heart appears mid-screen)
+          heart.style.animationDelay = options.initialDelay + 's';
+        }
+
+        // Size variation
+        const size = options.fast ? (1.5 + Math.random() * 1.5) : (1 + Math.random() * 1);
+        heart.style.fontSize = size + 'rem';
+
+        document.body.appendChild(heart);
+        return heart;
+      }
+
+      // Create initial hearts spread across the screen at various heights
+      const initialHeartCount = 15;
+      for (let i = 0; i < initialHeartCount; i++) {
+        // Negative delay makes hearts start at different points in their animation
+        // This spreads them vertically across the viewport
+        const initialDelay = -(Math.random() * 8);
+        createHeart({ initialDelay });
+      }
+
+      // Continuously spawn new hearts
+      let spawnInterval = 800;
+      function spawnHeart() {
+        createHeart({});
+        setTimeout(spawnHeart, spawnInterval + Math.random() * 400);
+      }
+      setTimeout(spawnHeart, 1000);
+
+      // Button interactions
+      const btnYes = document.getElementById('btn-yes');
+      const btnNo = document.getElementById('btn-no');
+      const initialContent = document.getElementById('initial-content');
+      const celebration = document.getElementById('celebration');
+
+      btnYes.addEventListener('click', (e) => {
+        initialContent.classList.add('hidden');
+        celebration.classList.add('show');
+
+        // Get click position for firework origin
+        const originX = e.clientX;
+        const originY = e.clientY;
+
+        // Create firework burst from button position
+        const burstCount = 80;
+        for (let i = 0; i < burstCount; i++) {
+          const heart = document.createElement('span');
+          heart.className = 'firework-heart';
+          heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+          heart.style.left = originX + 'px';
+          heart.style.top = originY + 'px';
+          heart.style.fontSize = (1.5 + Math.random() * 2) + 'rem';
+
+          // Random direction for explosion
+          const angle = (i / burstCount) * Math.PI * 2 + Math.random() * 0.5;
+          const distance = 150 + Math.random() * 200;
+          const distance2 = distance + 50 + Math.random() * 100;
+          const tx = Math.cos(angle) * distance;
+          const ty = Math.sin(angle) * distance;
+          const tx2 = Math.cos(angle) * distance2;
+          const ty2 = Math.sin(angle) * distance2 - 100; // drift up
+
+          heart.style.setProperty('--tx', tx + 'px');
+          heart.style.setProperty('--ty', ty + 'px');
+          heart.style.setProperty('--tx2', tx2 + 'px');
+          heart.style.setProperty('--ty2', ty2 + 'px');
+          heart.style.animationDelay = (Math.random() * 0.3) + 's';
+
+          document.body.appendChild(heart);
+          setTimeout(() => heart.remove(), 2000);
+        }
+
+        // Second wave of fireworks
+        setTimeout(() => {
+          for (let i = 0; i < 60; i++) {
+            const heart = document.createElement('span');
+            heart.className = 'firework-heart';
+            heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+            heart.style.left = originX + 'px';
+            heart.style.top = originY + 'px';
+            heart.style.fontSize = (2 + Math.random() * 2) + 'rem';
+
+            const angle = Math.random() * Math.PI * 2;
+            const distance = 100 + Math.random() * 250;
+            const tx = Math.cos(angle) * distance;
+            const ty = Math.sin(angle) * distance;
+            const tx2 = tx * 1.3;
+            const ty2 = ty * 1.3 - 80;
+
+            heart.style.setProperty('--tx', tx + 'px');
+            heart.style.setProperty('--ty', ty + 'px');
+            heart.style.setProperty('--tx2', tx2 + 'px');
+            heart.style.setProperty('--ty2', ty2 + 'px');
+
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 2000);
+          }
+        }, 200);
+
+        // Massive flood of rising hearts
+        for (let i = 0; i < 300; i++) {
+          setTimeout(() => createHeart({ fast: true }), i * 15);
+        }
+
+        // Continue flooding waves
+        setTimeout(() => {
+          for (let i = 0; i < 200; i++) {
+            setTimeout(() => createHeart({ fast: true }), i * 20);
+          }
+        }, 2000);
+
+        setTimeout(() => {
+          for (let i = 0; i < 200; i++) {
+            setTimeout(() => createHeart({ fast: true }), i * 20);
+          }
+        }, 4000);
+
+        setTimeout(() => {
+          for (let i = 0; i < 150; i++) {
+            setTimeout(() => createHeart({ fast: true }), i * 25);
+          }
+        }, 6000);
+
+        // Speed up ongoing heart spawning permanently
+        spawnInterval = 100;
+      });
+
+      // Make the "No" button escape from cursor
+      let noClickCount = 0;
+      let escapeTimer = null;
+      const messages = [
+        "Are you sure? 🥺",
+        "Pretty please? 💕",
+        "Think again! 💖",
+        "One more chance? 🌹",
+        "I know you meant yes! 💗"
+      ];
+
+      function escapeButton(e) {
+        const btn = btnNo;
+        const btnRect = btn.getBoundingClientRect();
+
+        // Switch to fixed positioning for full escape range
+        btn.classList.add('escaping');
+
+        // Calculate safe zones (away from cursor)
+        const padding = 50;
+        const btnWidth = btnRect.width;
+        const btnHeight = btnRect.height;
+        const maxX = window.innerWidth - btnWidth - padding;
+        const maxY = window.innerHeight - btnHeight - padding;
+
+        // Get cursor position
+        const cursorX = e.clientX;
+        const cursorY = e.clientY;
+
+        // Find a position far from the cursor
+        let newX, newY;
+        let attempts = 0;
+        const minDistance = 200;
+
+        do {
+          newX = padding + Math.random() * (maxX - padding);
+          newY = padding + Math.random() * (maxY - padding);
+          const distance = Math.sqrt(Math.pow(newX - cursorX, 2) + Math.pow(newY - cursorY, 2));
+          attempts++;
+          if (distance > minDistance || attempts > 20) break;
+        } while (true);
+
+        btn.style.left = newX + 'px';
+        btn.style.top = newY + 'px';
+      }
+
+      // On hover: wait 2 seconds then escape (unless on last message)
+      btnNo.addEventListener('mouseenter', (e) => {
+        // Don't escape on hover if all messages have been shown
+        if (noClickCount >= messages.length) return;
+
+        escapeTimer = setTimeout(() => {
+          escapeButton(e);
+        }, 300);
+      });
+
+      // Cancel escape timer if mouse leaves
+      btnNo.addEventListener('mouseleave', () => {
+        if (escapeTimer) {
+          clearTimeout(escapeTimer);
+          escapeTimer = null;
+        }
+      });
+
+      btnNo.addEventListener('click', (e) => {
+        // Cancel any pending escape
+        if (escapeTimer) {
+          clearTimeout(escapeTimer);
+          escapeTimer = null;
+        }
+
+        noClickCount++;
+        btnNo.textContent = messages[Math.min(noClickCount - 1, messages.length - 1)];
+
+        // Make yes button bigger each time
+        const currentScale = 1 + (noClickCount * 0.15);
+        btnYes.style.transform = `scale(${currentScale})`;
+
+        // Escape immediately on click (unless on last message)
+        if (noClickCount < messages.length) {
+          escapeButton(e);
+        }
+      });
+    </script>
+  </body>
+</html>
